@@ -12,6 +12,7 @@
         buscar por fichero <input type="text" name="fichero"><input type="submit" name="buscarfichero" value=Buscar><br>
         crear un nuevo fichero <input type="text" name="nombrenuevofichero"><input type="submit" name="creafichero" value="Crear">
     </form>
+    <!--He usado metodos post ya que son mas seguros-->
     <?php
 
     if(isset($_POST["enviar"])) {
@@ -56,8 +57,15 @@ if(isset($_POST["buscarfichero"])){
 }
 if(isset($_POST["creafichero"])){
     $nombrenuevofichero = $_POST["nombrenuevofichero"];
-    if(file_put_contents($rutanuevoarchivo."",$nombrenuevofichero)){
+    $rutanuevoarchivo = "C:/xampp/htdocs/practica4login/";
+    if(file_put_contents($rutanuevoarchivo, $nombrenuevofichero)!==false){
+        chmod($rutanuevoarchivo, 0644);
+        echo "Se ha creado el archivo ". $nombrenuevofichero;
+    }else{
+            echo "<p>no se ha podido crear</p>";
+        }
 }
- ?>
+
+?>
 </body>
 </html>
