@@ -1,13 +1,15 @@
 <?php
 //aqui se conecta a la base de datos de la base de datos
-$servername
-$conexion = new PDO('mysql:host');
+$dsn = 'mysql:host=localhost;dbname=censo';
+$userdb = 'root';
+$passdb = '';
+$conexion = new PDO($dsn, $userdb, $passdb);
 //aqui se muestra con un while lo que hay dentro de la base de datos
 function mostrarcenso() {
     global $conexion;
     $result = $conexion->query("SELECT * FROM persona");
 
-    while ($row = $result->fetch_assoc()) {
+    while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
         echo "<tr>";
         echo "<td>{$row['nombre']}</td>";
         echo "<td>{$row['apellidos']}</td>";

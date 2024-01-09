@@ -8,6 +8,7 @@
 </head>
 <body>
     <h1>Introduce personas al censo</h1>
+    <a href="logout.php">Cerrar sesion</a>
     <form action="back.php" method="POST">
         <label for="nombre">Nombre: </label>
         <input type="text" name="nombre" id="nombre">

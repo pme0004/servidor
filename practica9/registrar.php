@@ -1,34 +1,31 @@
 <?php
-if ($_SERVER["REQUEST_METHOD"] == "GET") {
+// Configuración de la conexión a la base de datos
+$dsn = 'mysql:host=localhost;dbname=censo';
+$userdb = 'root';
+$passdb = '';
+
+try {
+    // Crear una conexión PDO
+    $conexion = new PDO($dsn, $userdb, $passdb);
+
+    // Configurar el modo de error y excepción de PDO
+    $conexion->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
     // Recuperar datos del formulario
-    $usuario = $_GET["usuario"];
-    $contraseña = $_GET["contraseña"];
+    $usuario = $_POST['usuario'];
+    $contrasena = $_POST['contrasena'];
+    
+        $consulta = $conexion->prepare('INSERT INTO usuarios (usuario, contrasena) VALUES (:usuario, :contrasena)');
+        $consulta->bindParam(':usuario', $usuario, PDO::PARAM_STR);
+        $consulta->bindParam(':contrasena', $contrasena, PDO::PARAM_STR);
+        $consulta->execute();
+        echo "Datos insertados correctamente en la base de datos.";
 
-    // Validación básica (puedes agregar más validaciones según tus necesidades)
-    if (empty($usuario) || empty($contraseña)) {
-        echo "no has rellenado los dos campos";
-    } else {
-        // Conectar a la base de datos (reemplaza con tus propias credenciales)
-        $dsn = 'mysql:host=localhost;dbname=censo';
-        $usuario_bd = 'root';
-        $contraseña_bd = '';
-
-        try {
-            $conexion = new PDO($dsn, $usuario_bd, $contraseña_bd);
-            $conexion->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-            // Procesar registro (usar sentencias preparadas para mayor seguridad)
-            $query = "INSERT INTO usuarios (usuario, contraseña) VALUES (:usuario, :contraseña)";
-            $stmt = $conexion->prepare($query);
-            $contraseña_hasheada = password_hash($contraseña, PASSWORD_DEFAULT);
-            $stmt->bindParam(':usuario', $usuario);
-            $stmt->bindParam(':contraseña', $contraseña_hasheada);
-            $stmt->execute();
-
-            echo "Registro exitoso";
-        } catch (PDOException $e) {
-            echo "Error al registrar: " . $e->getMessage();
-        }
-    }
+} catch (PDOException $e) {
+    // Manejar errores de la conexión a la base de datos
+    echo "Error: " . $e->getMessage();
 }
+
+// Cerrar la conexión
+$conexion = null;
 ?>
